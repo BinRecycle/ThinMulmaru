@@ -1,5 +1,5 @@
 # 얇은물마루 | ThinMulmaru
-![Preview](./preview.png)
+![Preview](./preview_1.1.png)
 
 
 
