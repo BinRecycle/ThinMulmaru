@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preload" href="fonts/ThinMulmaru.ttf" as="font" type="truetype" crossorigin>
+    <link rel="preload" href="fonts/ThinMulmaru Mono.ttf" as="font" type="truetype" crossorigin>
+
+    <title>얇은물마루</title>
+    <style>
+        @font-face {
+            font-family: 'ThinMulmaru';
+            src: url('fonts/ThinMulmaru.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'ThinMulmaru Mono';
+            src: url('fonts/ThinMulmaru Mono.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 32px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        h1 {
+            font-size: 2.4rem;
+            margin-bottom: 8px;
+            color: #111;
+            font-family: 'ThinMulmaru';
+            font-weight: 400;
+        }
+
+        h2.section-title {
+            font-size: 1.4rem;
+            margin-bottom: 8px;
+            color: #111;
+            font-family: 'ThinMulmaru';
+            font-weight: 400;
+        }
+
+        .description {
+            font-size: 0.95rem;
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 24px;
+        }
+
+        a {
+            color: #4c6ef5;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 2px 4px;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+            border-bottom: 1.5px solid rgba(76, 110, 245, 0.3);
+        }
+
+        a:hover {
+            color: #3b5bdb;
+            background-color: #edf2ff;
+            border-bottom-color: #3b5bdb;
+        }
+
+        a[target="_blank"]::after {
+            content: " ↗";
+            font-size: 0.8em;
+        }
+
+        .controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            background: #f1f3f5;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            align-items: center;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #555;
+        }
+
+        input[type="range"] {
+            width: 100%;
+        }
+
+        .toggle-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 4px;
+        }
+
+        .toggle-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #555;
+            transition: color 0.2s;
+        }
+
+        .toggle-label.active {
+            color: #4c6ef5;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 48px;
+            height: 26px;
+            flex-shrink: 0;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ced4da;
+            transition: .3s;
+            border-radius: 26px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .3s;
+            border-radius: 50%;
+        }
+
+        input:checked+.slider {
+            background-color: #4c6ef5;
+        }
+
+        input:checked+.slider:before {
+            transform: translateX(22px);
+        }
+
+        .preview-textarea {
+            font-family: 'ProportionalFont', sans-serif;
+            font-size: 32px;
+            line-height: 1.4;
+            color: #111111;
+            min-height: 250px;
+            width: 100%;
+            padding: 20px;
+            border: 2px dashed #ced4da;
+            border-radius: 8px;
+            outline: none;
+            resize: vertical;
+            background-color: #fff;
+            margin-bottom: 32px;
+            transition: border-color 0.2s ease;
+        }
+
+        .preview-textarea:focus {
+            border-color: #4c6ef5;
+        }
+
+        .footer-section {
+            border-top: 1px solid #e9ecef;
+            padding-top: 24px;
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: #222;
+        }
+
+        .l-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 24px;
+            font-size: .9rem;
+        }
+
+        .l-table th,
+        .l-table td {
+            padding: 10px 14px;
+            text-align: left;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .l-table th {
+            background-color: #f8f9fa;
+            color: #495057;
+            width: 20%;
+            vertical-align: top;
+        }
+
+        .l-table td {
+            color: #333;
+        }
+
+        .l-table p.yes {
+            color: rgb(67, 188, 110);
+            font-weight: bold;
+        }
+
+        .l-table p.no {
+            color: rgb(219, 26, 71);
+            font-weight: bold;
+        }
+
+        .l-table p.gray {
+            color: #999;
+            margin-top: .5rem;
+            line-height: 1.2rem;
+        }
+
+        .credit-list {
+            list-style: none;
+            margin-bottom: 24px;
+            padding-left: 4px;
+        }
+
+        .credit-list li {
+            position: relative;
+            padding-left: 16px;
+            font-size: .95rem;
+            color: #495057;
+            line-height: 1.6;
+        }
+
+        .credit-list li::before {
+            content: "";
+            position: absolute;
+            left: 4px;
+            top: 50%;
+            transition: translateY(-50%);
+            width: 4px;
+            height: 4px;
+            background-color: #4c6ef5;
+            border-radius: 50%;
+        }
+
+        .download-group {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .download-group .description {
+            margin-bottom: 0;
+        }
+
+        .btn-download {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 20px;
+            background-color: #4c6ef5;
+            color: #ffffff;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            border-radius: 6px;
+            font-size: 1.5rem;
+            transition: background-color 0.2s ease;
+        }
+
+        .btn-download:hover {
+            background-color: #3b5bdb;
+        }
+
+        .copyright {
+            text-align: center;
+            font-size: 0.8rem;
+            color: rgba(134, 142, 150, 0.75);
+            margin-top: 1rem;
+            margin-bottom: .6rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>얇은물마루</h1>
+        <p class="description">
+            얇은물마루는 <a href="https://github.com/mushsooni/mulmaru" target="_blank" rel="noopener noreferrer">물마루</a>를 기반으로 기존 물마루의 굵은 획을 얇게 변형시킨 폰트입니다.
+        </p>
+
+        <div class="controls">
+            <div class="control-group">
+                <label>폰트 형태</label>
+                <div class="toggle-container">
+                    <span id="labelProp" class="toggle-label active">비례폭</span>
+                    <label class="switch">
+                        <input type="checkbox" id="fontToggle">
+                        <span class="slider"></span>
+                    </label>
+                    <span id="labelMono" class="toggle-label">고정폭</span>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label for="fontSize">글자 크기: <span id="sizeValue">32px</span></label>
+                <input type="range" id="fontSize" min="12" max="120" value="32">
+            </div>
+
+            <div class="control-group">
+                <label for="lineHeight">줄 간격: <span id="lineHeightValue">1.4</span></label>
+                <input type="range" id="lineHeight" min="0.8" max="2.5" step="0.1" value="1.4">
+            </div>
+        </div>
+
+        <textarea id="previewText" class="preview-textarea" placeholder="텍스트를 입력해 보세요..." spellcheck="false">다람쥐 헌 쳇바퀴에 타고파
+The quick brown fox jumps over a lazy dog.</textarea>
+
+        <div class="footer-section">
+            <h2 class="section-title">라이선스</h2>
+            <table class="l-table">
+                <tbody>
+                    <tr>
+                        <th>상업적 이용</th>
+                        <td>
+                            <p class="yes">가능</p>
+                            <p class="gray">폰트를 사용한 제작물은 용도와 매체에 상관없이 상업적으로 이용 및 판매할 수 있습니다.</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>임베드</th>
+                        <td>
+                            <p class="yes">가능</p>
+                            <p class="gray">문서·게임·소프트웨어에 포함하거나 웹 폰트로 사용할 수 있습니다. 폰트를 사용한 제작물의 라이선스를 변경할 필요는 없습니다.</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>출처 표기</th>
+                        <td>
+                            <p class="yes">필수 아님</p>
+                            <p class="gray">폰트를 사용한 제작물에 폰트명·제작자·출처를 표기할 필요가 없습니다.</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>수정 및 재배포</th>
+                        <td>
+                            <p class="yes">가능</p>
+                            <p class="gray">폰트를 수정·병합하거나 다른 형식으로 배포할 수 있습니다. 원본과 수정본 모두 재배포할 수 있으나 OFL-1.1 라이선스로 배포해야 합니다.</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>단독 판매</th>
+                        <td>
+                            <p class="no">금지</p>
+                            <p class="gray">폰트 파일을 단독으로 유료 판매할 수 없습니다. 임베드의 경우에는 가능합니다.</p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2 class="section-title">크레딧 및 사용한 도구</h2>
+            <ul class="credit-list">
+                <li>Mushsooni — 원본 디자인</li>
+                <li><a href="https://github.com/exqt/pixel-font-maker" target="_blank" rel="noopener noreferrer">pixel font maker</a></li>
+                <li><a href="https://fontforge.org/en-US/" target="_blank" rel="noopener noreferrer">Font Forge</a></li>
+            </ul>
+
+            <div class="download-group">
+                <button id="downloadBtn" type="button" class="btn-download">다운로드</button>
+                <a href="https://github.com/BinRecycle/ThinMulmaru" target="_blank" rel="noopener noreferrer">GitHub에서 보기</a>
+            </div>
+        </div>
+    </div>
+
+    <footer class="copyright">
+        © 2025 Mulmaru Font Project.<br>© 2026 BinRecycle
+    </footer>
+
+    <script>
+        const fontToggle = document.getElementById('fontToggle');
+        const labelProp = document.getElementById('labelProp');
+        const labelMono = document.getElementById('labelMono');
+        const previewText = document.getElementById('previewText');
+        const fontSizeInput = document.getElementById('fontSize');
+        const sizeValue = document.getElementById('sizeValue');
+        const lineHeightInput = document.getElementById('lineHeight');
+        const lineHeightValue = document.getElementById('lineHeightValue');
+        const downloadBtn = document.getElementById('downloadBtn');
+
+        downloadBtn.addEventListener('click', () => {
+            window.location.href = "https://github.com/BinRecycle/ThinMulmaru/releases/latest/download/ThinMulmaru.zip";
+        });
+
+        function updateFont() {
+            if (fontToggle.checked) {
+                previewText.style.fontFamily = '"ThinMulmaru Mono"';
+                labelMono.classList.add('active');
+                labelProp.classList.remove('active');
+            } else {
+                previewText.style.fontFamily = '"ThinMulmaru"';
+                labelProp.classList.add('active');
+                labelMono.classList.remove('active');
+            }
+        }
+
+        updateFont();
+
+        if ('fonts' in document) {
+            document.fonts.ready.then(() => {
+                updateFont();
+            });
+        }
+
+        fontToggle.addEventListener('change', updateFont);
+
+        fontSizeInput.addEventListener('input', (e) => {
+            const val = e.target.value;
+            previewText.style.fontSize = val + 'px';
+            sizeValue.textContent = val + 'px';
+        });
+
+        lineHeightInput.addEventListener('input', (e) => {
+            const val = e.target.value;
+            previewText.style.lineHeight = val;
+            lineHeightValue.textContent = val;
+        });
+    </script>
+
+</body>
+
+</html>
